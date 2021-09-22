@@ -87,7 +87,6 @@ Receive user feedback
 *** Tasks ***
 Order robots from RobotSpareBin Industries Inc
     Open the robot order website
-    Log    ${OUTPUT_DIR}
     ${orders}=    Get orders
     FOR    ${order}    IN    @{orders}
         Close the annoying modal
