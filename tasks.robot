@@ -20,9 +20,19 @@ ${GLOBAL_RETRY_INTERVAL}=    0.5s
 Open the robot order website
     Open Available Browser    https://robotsparebinindustries.com/#/robot-order
 
+Get orders download path
+    ${defaut_orders_path}=    Set Variable    https://robotsparebinindustries.com/orders.csv
+    Add text    Optional orders.csv file location that can be downloaded. If nothing provided, default will be used.
+    Add text input    path    label=orders.csv path    placeholder=${defaut_orders_path}
+    ${response}=    Run dialog    title=Order file location
+    ${orders_path_len}=    Get Length    ${response.path}
+    ${orders_path}=    Set Variable If      ${orders_path_len} > 0    ${response.path}    ${defaut_orders_path}
+    [Return]    ${orders_path}
+
 Get orders
+    ${orders_download_path}=    Get orders download path
     ${orders_output}=    Set Variable    ${OUTPUT_DIR}${/}orders.csv
-    Download    https://robotsparebinindustries.com/orders.csv    target_file=${orders_output}    overwrite=True
+    Download    ${orders_download_path}    target_file=${orders_output}    overwrite=True
     ${orders}=    Read table from CSV    ${orders_output}    dialect=excel
     [Return]    ${orders}
 
@@ -72,17 +82,11 @@ Go to order another robot
     Click Button When Visible    id:order-another
 
 Create a ZIP file of the receipts
-    Archive Folder With Zip  ${OUTPUT_DIR}${/}    ${OUTPUT_DIR}${/}receipts.zip  include=*.pdf
+    Archive Folder With Zip  ${OUTPUT_DIR}${/}    r{OUTPUT_DIR}${/}receipts.zip  include=*.pdf
 
 Share sacred knowladge
     ${secrets}=    Get Secret    secrets
     Log    ${secrets}[meaning_of_life]
-
-Receive user feedback
-    Add text    Please fill out this survey
-    Add text input    feedback    label=Was this robot a good robot?    placeholder=It was the best robot
-    ${response}=    Run dialog    title=Robot Feedback
-    Log    ${response.path}
 
 *** Tasks ***
 Order robots from RobotSpareBin Industries Inc
@@ -100,5 +104,4 @@ Order robots from RobotSpareBin Industries Inc
     END
     Create a ZIP file of the receipts
     Share sacred knowladge
-    Receive user feedback
     [Teardown]    Close browser
