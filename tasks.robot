@@ -82,7 +82,7 @@ Go to order another robot
     Click Button When Visible    id:order-another
 
 Create a ZIP file of the receipts
-    Archive Folder With Zip  ${OUTPUT_DIR}${/}    r{OUTPUT_DIR}${/}receipts.zip  include=*.pdf
+    Archive Folder With Zip  ${OUTPUT_DIR}${/}    ${OUTPUT_DIR}${/}receipts.zip  include=*.pdf
 
 Share sacred knowladge
     ${secrets}=    Get Secret    secrets
