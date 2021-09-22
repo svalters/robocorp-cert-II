@@ -15,18 +15,18 @@ Library           RPA.Dialogs
 *** Variables ***
 ${GLOBAL_RETRY_AMOUNT}=    10x
 ${GLOBAL_RETRY_INTERVAL}=    0.5s
+${DEFAULT_ORDERS_DOWNLOAD_PATH}=    https://robotsparebinindustries.com/orders.csv
 
 *** Keywords ***
 Open the robot order website
     Open Available Browser    https://robotsparebinindustries.com/#/robot-order
 
 Get orders download path
-    ${defaut_orders_path}=    Set Variable    https://robotsparebinindustries.com/orders.csv
     Add text    Optional orders.csv file location that can be downloaded. If nothing provided, default will be used.
-    Add text input    path    label=orders.csv path    placeholder=${defaut_orders_path}
+    Add text input    path    label=orders.csv path    placeholder=${DEFAULT_ORDERS_DOWNLOAD_PATH}
     ${response}=    Run dialog    title=Order file location
     ${orders_path_len}=    Get Length    ${response.path}
-    ${orders_path}=    Set Variable If      ${orders_path_len} > 0    ${response.path}    ${defaut_orders_path}
+    ${orders_path}=    Set Variable If      ${orders_path_len} > 0    ${response.path}    ${DEFAULT_ORDERS_DOWNLOAD_PATH}
     [Return]    ${orders_path}
 
 Get orders
